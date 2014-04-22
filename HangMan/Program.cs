@@ -10,7 +10,7 @@ namespace HangMan
     class Program
     {
         static string PlayerName = "";
-        static string[] WordsAvailable = { "guava", "godzilla", "lion", "pigeon", "plantain", "jabberwocky", "vorpal", "nightmare", "basilisk" };
+        static string[] WordsAvailable = { "guava", "godzilla", "liger", "pigeon", "plantain", "jabberwocky", "vorpal", "nightmare", "basilisk" };
         static string wordPicked;
         static int guessesBegin = 12;
         static int guessesRemaining = guessesBegin;
@@ -237,6 +237,7 @@ namespace HangMan
             Console.WriteLine();
 
             TextPrint("END OF LINE.");
+            Console.ReadKey();
         }
         static void TooBad()
         {
@@ -248,17 +249,17 @@ namespace HangMan
             {
                 TextPrint(wordPicked[i].ToString() + ' ');
             }
-            Console.WriteLine();
 
             TextPrint("If you feel gutsy, you may try again later.");
             TextPrint("END OF LINE.");
+            Console.ReadKey();
         }
         static void TextPrint(string input)
         {
             for (int i = 0; i < input.Length; i++)
             {
                 Console.Write(input[i]);
-                Thread.Sleep(50);
+                Thread.Sleep(20);
             }
             Console.WriteLine();
         }
