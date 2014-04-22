@@ -10,7 +10,6 @@ namespace HangMan
     class Program
     {
         static string PlayerName = "";
-        static string[] WordsAvailable = { "guava", "godzilla", "liger", "pigeon", "plantain", "jabberwocky", "vorpal", "nightmare", "basilisk" };
         static string wordPicked;
         static int guessesBegin = 12;
         static int guessesRemaining = guessesBegin;
@@ -22,10 +21,6 @@ namespace HangMan
         static void GameHangmen()
         {
             WouldYouLikeToPlay();
-            Console.Clear();
-
-
-            FigureOutWord();
             Console.Clear();
 
             do
@@ -54,31 +49,47 @@ namespace HangMan
             Console.Clear();
 
             TextPrint("Very well, " + PlayerName + ".");
-            Thread.Sleep(160);
+            Thread.Sleep(500);
             TextPrint("I shall begin.");
-            Thread.Sleep(160);
+            Thread.Sleep(700);
             TextPrint("I will decide upon a word.");
-            Thread.Sleep(160);
+            Thread.Sleep(500);
             TextPrint("You will have to guess what it is.");
-            Thread.Sleep(160);
+            Thread.Sleep(500);
             TextPrint("If you guess wrong, you will lose a guess.");
-            Thread.Sleep(160);
+            Thread.Sleep(500);
             TextPrint("If your guesses run down to zero, you lose.");
-            Thread.Sleep(160);
+            Thread.Sleep(500);
             TextPrint("Any letter within the word you guess will appear in place of a spacer.");
-            Thread.Sleep(160);
-            TextPrint("I hope you are ready, " + PlayerName + ", because these words aren't easy.");
-            Thread.Sleep(160);
-            TextPrint("Press any key to continue...if you dare.");
-            Console.ReadKey();
+            Thread.Sleep(1000);
+            Console.Clear();
+            TextPrint("Now, " + PlayerName + ", choose your category: Food, Creature, or General Ignorance.");
+            var category = Console.ReadLine();
+            category = category.ToLower();
+            Thread.Sleep(2000);
+            Console.Clear();
+
+            if (category == "food")
+            {
+                FigureOutWordFood();
+            }
+            if (category == "creature")
+            {
+                FigureOutWordCreature();
+            }
+            if (category == "general ignorance" || category == "general" || category == "ignorance")
+            {
+                FigureOutWordOther();
+            }
         }
-        static void FigureOutWord()
+        static void FigureOutWordFood()
         {
+            string[] FoodBank = { "sandwich", "banana", "ramen", "soup", "hazelnut", "enchiladas", "naan" };
             Random noPattern = new Random();
 
-            int patternIndex = noPattern.Next(0, WordsAvailable.Length);
+            int patternIndex = noPattern.Next(0, FoodBank.Length);
 
-            wordPicked = WordsAvailable[patternIndex].ToUpper();
+            wordPicked = FoodBank[patternIndex].ToUpper();
 
             Thread.Sleep(100);
             TextPrint("The word has been chosen.");
@@ -92,6 +103,57 @@ namespace HangMan
             for (int i = 0; i < wordPicked.Length; i++)
             {
                 Console.Write(hidden[i]);
+                Thread.Sleep(50);
+            }
+            ReviewAndAnalyze();
+        }
+        static void FigureOutWordCreature()
+        {
+            string[] cryptoZoo = { "godzilla", "yaoguai", "chimera", "doppelganger", "Imoogi", "banshee", "sharktopus", "kraken", "roc" };
+            Random noPattern = new Random();
+
+            int patternIndex = noPattern.Next(0, cryptoZoo.Length);
+
+            wordPicked = cryptoZoo[patternIndex].ToUpper();
+
+            Thread.Sleep(100);
+            TextPrint("The word has been chosen.");
+            Thread.Sleep(1200);
+
+            var hidden = new List<string>();
+            for (int i = 0; i < wordPicked.Length; i++)
+            {
+                hidden.Add("|| ");
+            }
+            for (int i = 0; i < wordPicked.Length; i++)
+            {
+                Console.Write(hidden[i]);
+                Thread.Sleep(50);
+            }
+            ReviewAndAnalyze();
+        }
+        static void FigureOutWordOther()
+        {
+            string[] random = { "moose", "lavender", "leotard", "vocaloid", "osprey" };
+            Random noPattern = new Random();
+
+            int patternIndex = noPattern.Next(0, random.Length);
+
+            wordPicked = random[patternIndex].ToUpper();
+
+            Thread.Sleep(100);
+            TextPrint("The word has been chosen.");
+            Thread.Sleep(1200);
+
+            var hidden = new List<string>();
+            for (int i = 0; i < wordPicked.Length; i++)
+            {
+                hidden.Add("|| ");
+            }
+            for (int i = 0; i < wordPicked.Length; i++)
+            {
+                Console.Write(hidden[i]);
+                Thread.Sleep(50);
             }
             ReviewAndAnalyze();
         }
@@ -212,10 +274,12 @@ namespace HangMan
                 if (letterGuess.Where(x => x == z).Any())
                 {
                     Console.Write(wordPicked[i] + " ");
+                    Thread.Sleep(50);
                 }
                 else
                 {
                     Console.Write("|| ");
+                    Thread.Sleep(50);
                 }
             }
         }
@@ -236,7 +300,7 @@ namespace HangMan
             Console.WriteLine();
             Console.WriteLine();
 
-            TextPrint("END OF LINE.");
+            TextPrint("PRESS ENTER TO END LINE.");
             Console.ReadKey();
         }
         static void TooBad()
@@ -251,7 +315,7 @@ namespace HangMan
             }
 
             TextPrint("If you feel gutsy, you may try again later.");
-            TextPrint("END OF LINE.");
+            TextPrint("PRESS ENTER TO END LINE.");
             Console.ReadKey();
         }
         static void TextPrint(string input)
@@ -259,7 +323,7 @@ namespace HangMan
             for (int i = 0; i < input.Length; i++)
             {
                 Console.Write(input[i]);
-                Thread.Sleep(20);
+                Thread.Sleep(35);
             }
             Console.WriteLine();
         }
@@ -271,7 +335,6 @@ namespace HangMan
         {
             GameHangmen();
 
-            Console.ReadKey();
         }
     }
 }
