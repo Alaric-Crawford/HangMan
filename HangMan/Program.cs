@@ -23,26 +23,43 @@ namespace HangMan
             WouldYouLikeToPlay();
             Console.Clear();
 
-            do
+            bool playing = true;
+            while (playing == true)
             {
-                Working();
-            } while (uWin == false && guessesRemaining > 0);
+                CategoryPick();
+                do
+                {
+                    Working();
+                } while (uWin == false && guessesRemaining > 0);
 
-            if (uWin)
-            {
-                Congrats();
+                if (uWin)
+                {
+                    Congrats();
+                }
+                else
+                {
+                    TooBad();
+                }
+                TextPrint("Would you like to play again?");
+                var replay = Console.ReadLine().ToString().ToLower();
+
+                if (replay == "no")
+                {
+                    playing = false;
+                }
+                else
+                {
+                    playing = true;
+                }
             }
-            else
-            {
-                TooBad();
-            }
+            TextPrint("Thank you for playing. I hope to see you again sometime.");
         }
         static void WouldYouLikeToPlay()
         {
-            TextPrint("Hello. Would you like to play a game?");
+            TextPrint("Hello. Shall we play a game?");
             Thread.Sleep(1500);
             Console.Clear();
-            TextPrint("I require your name.");
+            TextPrint("Before we begin, I must ask for your name.");
 
             PlayerName = Console.ReadLine().ToString();
 
@@ -50,24 +67,33 @@ namespace HangMan
 
             TextPrint("Very well, " + PlayerName + ".");
             Thread.Sleep(500);
-            TextPrint("I shall begin.");
-            Thread.Sleep(700);
-            TextPrint("I will decide upon a word.");
+            TextPrint("Let us begin.");
+            Thread.Sleep(1000);
+            TextPrint("First, you must choose a category.");
             Thread.Sleep(500);
-            TextPrint("You will have to guess what it is.");
+            TextPrint("Once you have chosen, I will select a word randomly within that category.");
             Thread.Sleep(500);
-            TextPrint("If you guess wrong, you will lose a guess.");
+            TextPrint("You will have to guess the letters or the word.");
             Thread.Sleep(500);
-            TextPrint("If your guesses run down to zero, you lose.");
+            TextPrint("If your guess is wrong, you will lose a guess.");
             Thread.Sleep(500);
-            TextPrint("Any letter within the word you guess will appear in place of a spacer.");
+            TextPrint("If your guesses run down to zero, you will have lost.");
+            Thread.Sleep(500);
+            TextPrint("If the letter you guess is within the word, they will replace the placeholder.");
+            Thread.Sleep(500);
+            TextPrint("If you guess the word, you will win.");
             Thread.Sleep(1000);
             Console.Clear();
-            TextPrint("Now, " + PlayerName + ", choose your category: Food, Creature, or General Ignorance.");
+
+        }
+        static void CategoryPick()
+        {
+            TextPrint("Choose your category, " + PlayerName + ": Food, Creature, or Random Information.");
             var category = Console.ReadLine();
             category = category.ToLower();
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             Console.Clear();
+            Processing();
 
             if (category == "food")
             {
@@ -77,7 +103,7 @@ namespace HangMan
             {
                 FigureOutWordCreature();
             }
-            if (category == "general ignorance" || category == "general" || category == "ignorance")
+            if (category == "random information" || category == "randon" || category == "information" || category == "random info")
             {
                 FigureOutWordOther();
             }
@@ -109,7 +135,7 @@ namespace HangMan
         }
         static void FigureOutWordCreature()
         {
-            string[] cryptoZoo = { "godzilla", "yaoguai", "chimera", "doppelganger", "Imoogi", "banshee", "sharktopus", "kraken", "roc" };
+            string[] cryptoZoo = { "godzilla", "yaoguai", "chimera", "doppelganger", "imoogi", "banshee", "sharktopus", "kraken", "roc" };
             Random noPattern = new Random();
 
             int patternIndex = noPattern.Next(0, cryptoZoo.Length);
@@ -134,7 +160,7 @@ namespace HangMan
         }
         static void FigureOutWordOther()
         {
-            string[] random = { "moose", "lavender", "leotard", "vocaloid", "osprey" };
+            string[] random = { "moose", "lavender", "leotard", "vocaloid", "osprey", "moscow" };
             Random noPattern = new Random();
 
             int patternIndex = noPattern.Next(0, random.Length);
@@ -163,11 +189,13 @@ namespace HangMan
             TextPrint("Enter your guess");
 
             playerGuess = Console.ReadLine().ToUpper();
+            Console.WriteLine();
+            Processing();
             Console.Clear();
 
             if (playerGuess.Length > 1)
             {
-                if (playerGuess == wordPicked)
+                if (playerGuess.ToString() == wordPicked.ToString())
                 {
                     TextPrint("That is the word.");
                     uWin = true;
@@ -286,22 +314,21 @@ namespace HangMan
         static void Congrats()
         {
             TextPrint("Well done, " + PlayerName + ". You have completed the word.");
+            Thread.Sleep(1300);
             TextPrint("Impressive.");
+            Thread.Sleep(1000);
             TextPrint("It only took you " + (guessesBegin - guessesRemaining) + " mistakes.");
-
+            Thread.Sleep(800);
             TextPrint("The word was: ");
             Console.WriteLine();
 
             for (int i = 0; i < wordPicked.Length; i++)
             {
                 Console.Write(wordPicked[i].ToString() + ' ');
+                Thread.Sleep(100);
             }
-
-            Console.WriteLine();
-            Console.WriteLine();
-
-            TextPrint("PRESS ENTER TO END LINE.");
-            Console.ReadKey();
+            Thread.Sleep(2000);
+            Console.Clear();
         }
         static void TooBad()
         {
@@ -312,11 +339,10 @@ namespace HangMan
             for (int i = 0; i < wordPicked.Length; i++)
             {
                 TextPrint(wordPicked[i].ToString() + ' ');
+                Thread.Sleep(100);
             }
-
-            TextPrint("If you feel gutsy, you may try again later.");
-            TextPrint("PRESS ENTER TO END LINE.");
-            Console.ReadKey();
+            Thread.Sleep(2000);
+            Console.Clear();
         }
         static void TextPrint(string input)
         {
@@ -326,6 +352,25 @@ namespace HangMan
                 Thread.Sleep(35);
             }
             Console.WriteLine();
+        }
+        static void Processing()
+        {
+            for (var i = 0; i < 6; i++)
+            {
+                Console.WriteLine("|");
+                Thread.Sleep(500);
+                Console.Clear();
+                Console.WriteLine("/");
+                Thread.Sleep(500);
+                Console.Clear();
+                Console.WriteLine("--");
+                Thread.Sleep(500);
+                Console.Clear();
+                Console.WriteLine("\\");
+                Thread.Sleep(500);
+                Console.Clear();
+            }
+            Console.Clear();
         }
         /// <summary>
         /// Will require nearly every C# syntax and operation I have learned
